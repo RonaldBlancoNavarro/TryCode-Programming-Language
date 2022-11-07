@@ -1,3 +1,5 @@
+TT_INT = "INT"
+
 def hola():
     print("hola")
 
