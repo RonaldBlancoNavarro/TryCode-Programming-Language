@@ -1,6 +1,3 @@
 {
-    "python.formatting.provider": "black",
-    "python.analysis.extraPaths": [
-        "./TryCode"
-    ]
+    "python.formatting.provider": "black"
 }
