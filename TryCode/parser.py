@@ -15,6 +15,7 @@ class TryCodeParser(Parser):
 
     @_("")
     def statement(self, p):
+        print("statement")
         pass
 
     @_("FOR var_assign TO expr THEN statement")
@@ -44,17 +45,31 @@ class TryCodeParser(Parser):
     @_("var_assign")
     def statement(self, p):
         return p.var_assign
+    
+    @_("bool_assign")
+    def statement(self, p):
+        return p.bool_assign
 
     @_('NAME "=" expr')
     def var_assign(self, p):
+        print("name=e")
         return ("var_assign", p.NAME, p.expr)
 
     @_('NAME "=" STRING')
     def var_assign(self, p):
         return ("var_assign", p.NAME, p.STRING)
+    
+    @_('NAME "=" TRUE')
+    def bool_assign(self, p):
+        return ("bool_assign", p.NAME, p.TRUE)
+
+    @_('NAME "=" FALSE')
+    def bool_assign(self, p):
+        return ("bool_assign", p.NAME, p.FALSE)
 
     @_("expr")
     def statement(self, p):
+        print("expr")
         return p.expr
 
     @_('expr "+" expr')

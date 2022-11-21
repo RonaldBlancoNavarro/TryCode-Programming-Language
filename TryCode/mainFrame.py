@@ -13,6 +13,8 @@ from tkinter import (
 )
 import sys
 from interpreter import *
+from lexer import TryCodeLexer
+from parser import TryCodeParser
 # sys.path.insert(1, "\TryCode\TryCode")
 # from TryCode import tryCode
 
@@ -29,6 +31,9 @@ class MainFrame(Frame):
         self.var_op = IntVar()
         self.master = master
         self.pack()
+        self.lexer = TryCodeLexer()
+        self.parser = TryCodeParser()
+        self.env = {}
         self.create_widgets()
 
     def create_widgets(self):
@@ -65,14 +70,23 @@ class MainFrame(Frame):
         self.txtOutput.pack(side="left")
         scroll.config(command=self.txtOutput.yview)
 
+
     def limpiar(self):
         self.txtInput.delete(1.0, "end-1c")
         self.txtOutput.delete(1.0, "end-1c")
+        
 
     def compilar(self):
         self.txtOutput.delete(1.0, "end-1c")
-        text = self.txtInput.get(1.0, "end-1c")
-        ejecutar(text , self.txtOutput)
-        
+        input = self.txtInput.get(1.0, "end-1c")
+        try:
+            text = input
+        except EOFError:
+            return
+        if text:
+            tree = self.parser.parse(self.lexer.tokenize(text))
+            TryCodeExecute(tree, self.env , self.txtOutput)
+            self.txtOutput.see(END)
+
     def ejecutar(self):
         messagebox.showinfo(title="PruebaEjecutar", message="ejecucion exitosa")
