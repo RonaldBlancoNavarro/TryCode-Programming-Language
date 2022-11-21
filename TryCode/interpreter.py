@@ -1,7 +1,4 @@
 from tkinter import END
-from lexer import TryCodeLexer
-from parser import TryCodeParser
-
 
 class TryCodeExecute:
     def __init__(self, tree, env, txtOutput):
@@ -17,6 +14,12 @@ class TryCodeExecute:
         if isinstance(result, str) and result[0] == '"':
             # print(result)
             txtOutput.insert(1.0,result)
+        if result is not None and result=="TRUE" :
+            # print(result)
+            txtOutput.insert(1.0,result)
+        if result is not None and result=="FALSE" :
+            # print(result)
+            txtOutput.insert(1.0,result)
 
     def walkTree(self, node):
 
@@ -25,6 +28,8 @@ class TryCodeExecute:
         if isinstance(node, float):
             return node
         if isinstance(node, str):
+            return node
+        if isinstance(node, bool):
             return node
 
         if node is None:
@@ -45,6 +50,9 @@ class TryCodeExecute:
 
         if node[0] == "str":
             return node[1]
+        
+        if node[0] == "bool":
+            return node[2]
 
         if node[0] == "if_stmt":
             result = self.walkTree(node[1])
@@ -84,6 +92,10 @@ class TryCodeExecute:
             except LookupError:
                 print("Undefined variable '" + node[1] + "' found!")
                 return 0
+        
+        if node[0] == "bool_assign":
+            self.env[node[1]] = self.walkTree(node[2])
+            return node[1]
 
         if node[0] == "for_loop":
             if node[1][0] == "for_loop_setup":
@@ -104,18 +116,18 @@ class TryCodeExecute:
             return (self.walkTree(node[1]), self.walkTree(node[2]))
 
 
-def ejecutar(input, txtOutput):
-    lexer = TryCodeLexer()
-    parser = TryCodeParser()
-    env = {}
-    try:
-        text = input
-    except EOFError:
-        return
-    if text:
-        tree = parser.parse(lexer.tokenize(text))
-        TryCodeExecute(tree, env , txtOutput)
-        txtOutput.see(END)
+# def ejecutar(input, txtOutput):
+#     lexer = TryCodeLexer()
+#     parser = TryCodeParser()
+#     env = {}
+#     try:
+#         text = input
+#     except EOFError:
+#         return
+#     if text:
+#         tree = parser.parse(lexer.tokenize(text))
+#         TryCodeExecute(tree, env , txtOutput)
+#         txtOutput.see(END)
 
 
 
