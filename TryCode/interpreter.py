@@ -79,6 +79,8 @@ class TryCodeExecute:
             return self.walkTree(node[1]) - self.walkTree(node[2])
         elif node[0] == "mul":
             return self.walkTree(node[1]) * self.walkTree(node[2])
+        elif node[0] == "neg":
+            return -1 * self.walkTree(node[1])            
         elif node[0] == "div":
             return self.walkTree(node[1]) / self.walkTree(node[2])
 

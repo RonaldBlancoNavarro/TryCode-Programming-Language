@@ -79,7 +79,7 @@ class TryCodeParser(Parser):
     @_('expr "-" expr')
     def expr(self, p):
         return ("sub", p.expr0, p.expr1)
-
+      
     @_('expr "*" expr')
     def expr(self, p):
         return ("mul", p.expr0, p.expr1)
@@ -90,7 +90,8 @@ class TryCodeParser(Parser):
 
     @_('"-" expr %prec UMINUS')
     def expr(self, p):
-        return p.expr
+        # return p.expr
+        return ("neg", p.expr) 
 
     @_("NAME")
     def expr(self, p):

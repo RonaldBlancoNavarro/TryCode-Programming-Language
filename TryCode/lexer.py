@@ -23,7 +23,7 @@ class TryCodeLexer(Lexer):
     EQEQ = r'=='
 
 
-    @_(r"[+-]?[0-9]+\.[0-9]+")
+    @_(r"[0-9]+\.[0-9]+")
     def FLOAT(self, t):
         t.value = float(t.value)
         return t
