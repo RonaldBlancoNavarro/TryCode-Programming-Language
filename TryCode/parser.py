@@ -18,13 +18,13 @@ class TryCodeParser(Parser):
         # print("statement")
         pass
 
+    @_("WHILE condition THEN \n statement \n  statement")
+    def statement(self, p):
+        return ("while_loop", p.condition,("while_loop_statements", p.statement0, p.statement1) )   
+
     @_("FOR var_assign TO expr THEN statement")
     def statement(self, p):
         return ("for_loop", ("for_loop_setup", p.var_assign, p.expr), p.statement)
-
-    # @_('IF condition THEN statement ELSE statement')
-    # def statement(self, p):
-    #    return ('if_stmt', p.condition, ('branch', p.statement0, p.statement1))
 
     @_("IF condition THEN \n statement ELSE \n statement")
     def statement(self, p):
