@@ -5,7 +5,7 @@ class TryCodeExecute:
         self.txtOutput = txtOutput
         self.env = env
         result = self.walkTree(tree)
-        if result is not None and isinstance(result, int):
+        if result is not None and isinstance(result, int) and result != True and result != False:
             # print(result)
             self.txtOutput.insert(END,result)
         if result is not None and isinstance(result, float):
@@ -17,9 +17,9 @@ class TryCodeExecute:
         if result is not None  and isinstance(result, bool): #and result=="TRUE" :
             # print(result)
             self.txtOutput.insert(END,result)
-        if result is not None and result=="NULL" :
+        if result is None:
             # print(result)
-            self.txtOutput.insert(END,result)
+            self.txtOutput.insert(END,"Error logico: Variable nula, no se puede imprimir.")
 
         # if result is not None and isinstance(result, bool): #and result=="FALSE" :
         #     # print(result)
@@ -31,6 +31,8 @@ class TryCodeExecute:
             return True
         if node == "FALSE":
             return False
+        if node == "NULL":
+            return None
         # if isinstance(node, bool): 
         #     return node
 

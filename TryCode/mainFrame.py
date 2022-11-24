@@ -13,6 +13,7 @@ from tkinter import (
 )
 import sys
 from interpreter import *
+from tkinter import *
 from lexer import TryCodeLexer
 from parser import TryCodeParser
 
@@ -43,15 +44,43 @@ class MainFrame(Frame):
         self.env = {}
         self.create_widgets()
         self.input=""
+        
 
     def create_widgets(self):
 
-        self.btnNuevo = Button(self, text="Nuevo", command=self.limpiar)
-        self.btnNuevo.place(x=10, y=10, width=100, height=20)
-        self.lblOpciones = Label(self, text="Opciones")
-        self.lblOpciones.place(x=100, y=10, width=100, height=20)
-        self.btnSalir = Button(self, text="Salir", command=self.master.destroy)
-        self.btnSalir.place(x=200, y=10, width=100, height=20)
+        menubar=Menu(self.master)
+
+        self.master.config(menu=menubar)
+
+        filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Nuevo", command=self.limpiar)
+        filemenu.add_separator()
+        filemenu.add_command(label="Salir", command=self.master.quit)
+
+        Words = Menu(menubar, tearoff=0)
+        Words.add_command(label="IF")
+
+        Optionmenu = Menu(menubar, tearoff=0)
+        Optionmenu.add_cascade(label="Palabras reservadas",menu=Words)
+        Optionmenu.add_cascade(label="Sintaxis")
+        Optionmenu.add_cascade(label="Semantica")
+        Optionmenu.add_cascade(label="Tipos de datos")
+
+        helpmenu = Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="Ayuda")
+        helpmenu.add_separator()
+        helpmenu.add_command(label="Acerca de...")
+
+        menubar.add_cascade(label="Archivo", menu=filemenu)
+        menubar.add_cascade(label="Opciones", menu=Optionmenu)
+        menubar.add_cascade(label="Ayuda", menu=helpmenu)
+
+        # self.btnNuevo = Button(self, text="Nuevo", command=self.limpiar)
+        # self.btnNuevo.place(x=10, y=10, width=100, height=20)
+        # self.lblOpciones = Label(self, text="Opciones")
+        # self.lblOpciones.place(x=100, y=10, width=100, height=20)
+        # self.btnSalir = Button(self, text="Salir", command=self.master.destroy)
+        # self.btnSalir.place(x=200, y=10, width=100, height=20)
 
         self.btnCalcular = Button(self, text="Compilar", command=self.compilar)
         self.btnCalcular.place(x=1100, y=650)
@@ -89,7 +118,7 @@ class MainFrame(Frame):
             text = extraerExpresion(self)
             if text == "-1":
                 self.txtOutput.insert(END, '\n')
-                self.txtOutput.insert(END, "Error usencia decaracter ';' al final de expresion -  Compilacion finalizada")
+                self.txtOutput.insert(END, "Error usencia de caracter ';' al final de expresion -  Compilacion finalizada")
                 return                    
             if text:
                 tree = self.parser.parse(self.lexer.tokenize(text))

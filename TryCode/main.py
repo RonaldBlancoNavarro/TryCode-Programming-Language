@@ -1,5 +1,5 @@
 from mainFrame import MainFrame
-from tkinter import Tk
+from tkinter import *
 
 def main():
     root = Tk()
