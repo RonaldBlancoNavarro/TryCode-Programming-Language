@@ -17,9 +17,6 @@ class TryCodeExecute:
         if result is not None  and isinstance(result, bool): #and result=="TRUE" :
             # print(result)
             self.txtOutput.insert(END,result)
-        # if result is not None and isinstance(result, bool): #and result=="FALSE" :
-        #     # print(result)
-        #     self.txtOutput.insert(END,result)
 
     def walkTree(self, node):
 
@@ -149,32 +146,3 @@ class TryCodeExecute:
                         self.txtOutput.insert(END, '\n')
                         self.txtOutput.insert(END,res)
                     self.walkTree(node[2][2])
-
-
-# def ejecutar(input, txtOutput):
-#     lexer = TryCodeLexer()
-#     parser = TryCodeParser()
-#     env = {}
-#     try:
-#         text = input
-#     except EOFError:
-#         return
-#     if text:
-#         tree = parser.parse(lexer.tokenize(text))
-#         TryCodeExecute(tree, env , txtOutput)
-#         txtOutput.see(END)
-
-
-
-# if __name__ == "__main__":
-#     lexer = TryCodeLexer()
-#     parser = TryCodeParser()
-#     env = {}
-#     while True:
-#         try:
-#             text = input("TryCode > ")
-#         except EOFError:
-#             break
-#         if text:
-#             tree = parser.parse(lexer.tokenize(text))
-#             TryCodeExecute(tree, env)

@@ -51,37 +51,3 @@ class TryCodeLexer(Lexer):
     def error(self, t):
         print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
         self.index += 1
-
-
-
-    # @_(r'\n+')
-    # def newline(self,t ):
-    #     self.lineno = t.value.count('\n') 
-    #     print(self.lineno)
-
-
-
-    # Line number tracking
-# if __name__ == '__main__':
-#     data = '''
-#         # Counting
-#         x = 0;
-#         2+2;
-#         x;
-#         '''
-
-#     listaExpresion = []  # Tokens dentro de una expresion
-#     listaExpresiones=[]  # Lista de expresiones
-#     lexer = TryCodeLexer()
-#     for tok in lexer.tokenize(data):
-#         if tok.type != ';':
-#             listaExpresion.append(tok)
-#         else:
-#             # listaExpresion.append(tok)
-#             listaExpresiones.append(listaExpresion)
-#             print(listaExpresion)
-#             listaExpresion = []
-#             print("<----------------------->")
-#         # print(tok)
-#     print("<-------Lista expresiones---------------->")
-#     print(listaExpresiones)

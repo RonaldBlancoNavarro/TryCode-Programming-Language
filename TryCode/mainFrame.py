@@ -16,9 +16,6 @@ from interpreter import *
 from lexer import TryCodeLexer
 from parser import TryCodeParser
 
-# sys.path.insert(1, "\TryCode\TryCode")
-# from TryCode import tryCode
-
 def extraerExpresion(self):    #encontar ; mas cercano y retornar la cadena de texto desde el inicio hasta el ;
     expresion = ""
     if self.input == "":
@@ -30,7 +27,6 @@ def extraerExpresion(self):    #encontar ; mas cercano y retornar la cadena de t
             return expresion    
     except ValueError:
         return "-1"
-
 
 class MainFrame(Frame):
     def __init__(self, master=None):
@@ -102,32 +98,3 @@ class MainFrame(Frame):
 
     def ejecutar(self):
         messagebox.showinfo(title="PruebaEjecutar", message="ejecucion exitosa")
-
-
-
-
-            # text = input
-
-            # print(self.input)
-            # print("----------------------")
-            # print(text)
-
-
-            # lexer1 = self.lexer.get_lexer()
-            # print(lexer1)
-            # print("hola mundo")
-
-            # listaExpresion = []  # Tokens dentro de una expresion
-            # listaExpresiones=[]  # Lista de expresiones
-            # for tok in self.lexer.tokenize(text):
-            #     print(tok)
-            #     if tok.type != ';':
-            #         listaExpresion.append(tok)
-            #     else:
-            #         listaExpresiones.append(listaExpresion)
-            #         listaExpresion = []
-            # tree = self.parser.parse(listaExpresiones)
-            # TryCodeExecute(tree, self.env , self.txtOutput)
-            # self.txtOutput.see(END)
-
-            # print(self.parser.parse(self.lexer.tokenize(text)))
