@@ -20,6 +20,10 @@ class TryCodeExecute:
         if result is not None and result=="FALSE" :
             # print(result)
             self.txtOutput.insert(END,result)
+        if result is not None and result=="NULL" :
+            # print(result)
+            self.txtOutput.insert(END,result)
+
 
     def walkTree(self, node):
 
@@ -108,6 +112,10 @@ class TryCodeExecute:
                 return 0
         
         if node[0] == "bool_assign":
+            self.env[node[1]] = self.walkTree(node[2])
+            return node[1]
+
+        if node[0] == "null_assign":
             self.env[node[1]] = self.walkTree(node[2])
             return node[1]
 
