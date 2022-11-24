@@ -38,6 +38,18 @@ class TryCodeParser(Parser):
     def statement(self, p):
         return ("fun_call", p.NAME)
 
+    @_("condition AND condition")
+    def condition(self, p):
+        return ("condition_and", p.condition0, p.condition1)
+
+    @_("condition OR condition")
+    def condition(self, p):
+        return ("condition_or", p.condition0, p.condition1)
+
+    @_("NOT condition")
+    def condition(self, p):
+        return ("condition_not", p.condition)        
+
     @_("expr EQEQ expr")
     def condition(self, p):
         return ("condition_eqeq", p.expr0, p.expr1)
