@@ -17,9 +17,9 @@ class TryCodeExecute:
         if result is not None  and isinstance(result, bool): #and result=="TRUE" :
             # print(result)
             self.txtOutput.insert(END,result)
-        if result is None:
-            # print(result)
-            self.txtOutput.insert(END,"Error logico: Variable nula, no se puede imprimir.")
+        # if result is None:
+        #     # print(result)
+        #     self.txtOutput.insert(END,"Error logico: Variable nula, no se puede imprimir.")
 
         # if result is not None and isinstance(result, bool): #and result=="FALSE" :
         #     # print(result)
