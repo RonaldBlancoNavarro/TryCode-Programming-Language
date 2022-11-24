@@ -14,26 +14,31 @@ class TryCodeExecute:
         if isinstance(result, str) and result[0] == '"':
             # print(result)
             self.txtOutput.insert(END,result)
-        if result is not None and result=="TRUE" :
-            # print(result)
-            self.txtOutput.insert(END,result)
-        if result is not None and result=="FALSE" :
+        if result is not None  and isinstance(result, bool): #and result=="TRUE" :
             # print(result)
             self.txtOutput.insert(END,result)
         if result is not None and result=="NULL" :
             # print(result)
             self.txtOutput.insert(END,result)
 
+        # if result is not None and isinstance(result, bool): #and result=="FALSE" :
+        #     # print(result)
+        #     self.txtOutput.insert(END,result)
 
     def walkTree(self, node):
+
+        if node == "TRUE":
+            return True
+        if node == "FALSE":
+            return False
+        # if isinstance(node, bool): 
+        #     return node
 
         if isinstance(node, int):
             return node
         if isinstance(node, float):
             return node
         if isinstance(node, str):
-            return node
-        if isinstance(node, bool):
             return node
 
         if node is None:
@@ -75,7 +80,13 @@ class TryCodeExecute:
         if node[0] == "condition_lt":
             return self.walkTree(node[1]) < self.walkTree(node[2])   
         if node[0] == "condition_gt":
-            return self.walkTree(node[1]) > self.walkTree(node[2])                                                 
+            return self.walkTree(node[1]) > self.walkTree(node[2])    
+        if node[0] == "condition_and":
+           return self.walkTree(node[1]) and self.walkTree(node[2])
+        if node[0] == "condition_or":
+           return self.walkTree(node[1]) or self.walkTree(node[2])
+        if node[0] == "condition_not":
+            return not self.walkTree(node[1])                                  
 
         if node[0] == "fun_def":
             self.env[node[1]] = node[2]

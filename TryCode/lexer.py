@@ -1,7 +1,7 @@
 from sly import Lexer
 
 class TryCodeLexer(Lexer):
-    tokens = { NAME, NUMBER, STRING, FLOAT,NULL, IF, THEN, ELSE, FOR, FUN, WHILE, TO, ARROW, EQEQ , NOEQ, LTEQ, GTEQ, LT, GT, TRUE , FALSE }
+    tokens = { NAME, NUMBER, STRING, FLOAT,NULL, IF, THEN, ELSE, FOR, FUN, WHILE, TO, ARROW, EQEQ , NOEQ, LTEQ, GTEQ, LT, GT, TRUE , FALSE , AND, OR, NOT }
     ignore = '\t '
 
     literals = { '=', '+', '-', '/', '*', '(', ')', '{', '}', ',', ';' }
@@ -17,6 +17,9 @@ class TryCodeLexer(Lexer):
     TRUE = r'TRUE'
     FALSE = r'FALSE'
     NULL= r'NULL'
+    AND = r'AND'
+    OR = r'OR'
+    NOT = r'NOT'
     ARROW = r'->'
     NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
     STRING = r'\".*?\"'
