@@ -7,29 +7,34 @@ class TryCodeExecute:
         result = self.walkTree(tree)
         if result is not None and isinstance(result, int):
             # print(result)
-            txtOutput.insert(1.0,result)
+            self.txtOutput.insert(END,result)
         if result is not None and isinstance(result, float):
             # print(result)
-            txtOutput.insert(1.0,result)
+            self.txtOutput.insert(END,result)
         if isinstance(result, str) and result[0] == '"':
             # print(result)
-            txtOutput.insert(1.0,result)
-        if result is not None and result=="TRUE" :
+            self.txtOutput.insert(END,result)
+        if result is not None  and isinstance(result, bool): #and result=="TRUE" :
             # print(result)
-            txtOutput.insert(1.0,result)
-        if result is not None and result=="FALSE" :
-            # print(result)
-            txtOutput.insert(1.0,result)
+            self.txtOutput.insert(END,result)
+        # if result is not None and isinstance(result, bool): #and result=="FALSE" :
+        #     # print(result)
+        #     self.txtOutput.insert(END,result)
 
     def walkTree(self, node):
+
+        if node == "TRUE":
+            return True
+        if node == "FALSE":
+            return False
+        # if isinstance(node, bool): 
+        #     return node
 
         if isinstance(node, int):
             return node
         if isinstance(node, float):
             return node
         if isinstance(node, str):
-            return node
-        if isinstance(node, bool):
             return node
 
         if node is None:
@@ -62,6 +67,22 @@ class TryCodeExecute:
 
         if node[0] == "condition_eqeq":
             return self.walkTree(node[1]) == self.walkTree(node[2])
+        if node[0] == "condition_noeq":
+            return self.walkTree(node[1]) != self.walkTree(node[2])   
+        if node[0] == "condition_lteq":
+            return self.walkTree(node[1]) <= self.walkTree(node[2])    
+        if node[0] == "condition_gteq":
+            return self.walkTree(node[1]) >= self.walkTree(node[2])   
+        if node[0] == "condition_lt":
+            return self.walkTree(node[1]) < self.walkTree(node[2])   
+        if node[0] == "condition_gt":
+            return self.walkTree(node[1]) > self.walkTree(node[2])    
+        if node[0] == "condition_and":
+           return self.walkTree(node[1]) and self.walkTree(node[2])
+        if node[0] == "condition_or":
+           return self.walkTree(node[1]) or self.walkTree(node[2])
+        if node[0] == "condition_not":
+            return not self.walkTree(node[1])                                  
 
         if node[0] == "fun_def":
             self.env[node[1]] = node[2]
@@ -70,7 +91,8 @@ class TryCodeExecute:
             try:
                 return self.walkTree(self.env[node[1]])
             except LookupError:
-                print("Undefined function '%s'" % node[1])
+                # print("Undefined function '%s'" % node[1])
+                self.txtOutput.insert(END,"Undefined function '%s'" % node[1])
                 return 0
 
         if node[0] == "add":
@@ -79,6 +101,8 @@ class TryCodeExecute:
             return self.walkTree(node[1]) - self.walkTree(node[2])
         elif node[0] == "mul":
             return self.walkTree(node[1]) * self.walkTree(node[2])
+        elif node[0] == "neg":
+            return -1 * self.walkTree(node[1])            
         elif node[0] == "div":
             return self.walkTree(node[1]) / self.walkTree(node[2])
 
@@ -90,7 +114,8 @@ class TryCodeExecute:
             try:
                 return self.env[node[1]]
             except LookupError:
-                print("Undefined variable '" + node[1] + "' found!")
+                # print("Undefined variable '" + node[1] + "' found!")
+                self.txtOutput.insert(END,"Undefined variable '" + node[1] + "' found!")
                 return 0
         
         if node[0] == "bool_assign":

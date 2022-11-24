@@ -15,7 +15,7 @@ class TryCodeParser(Parser):
 
     @_("")
     def statement(self, p):
-        print("statement")
+        # print("statement")
         pass
 
     @_("FOR var_assign TO expr THEN statement")
@@ -38,9 +38,41 @@ class TryCodeParser(Parser):
     def statement(self, p):
         return ("fun_call", p.NAME)
 
+    @_("condition AND condition")
+    def condition(self, p):
+        return ("condition_and", p.condition0, p.condition1)
+
+    @_("condition OR condition")
+    def condition(self, p):
+        return ("condition_or", p.condition0, p.condition1)
+
+    @_("NOT condition")
+    def condition(self, p):
+        return ("condition_not", p.condition)        
+
     @_("expr EQEQ expr")
     def condition(self, p):
         return ("condition_eqeq", p.expr0, p.expr1)
+
+    @_("expr NOEQ expr")
+    def condition(self, p):
+        return ("condition_noeq", p.expr0, p.expr1)        
+
+    @_("expr LTEQ expr")
+    def condition(self, p):
+        return ("condition_lteq", p.expr0, p.expr1) 
+
+    @_("expr GTEQ expr")
+    def condition(self, p):
+        return ("condition_gteq", p.expr0, p.expr1)   
+
+    @_("expr LT expr")
+    def condition(self, p):
+        return ("condition_lt", p.expr0, p.expr1)   
+
+    @_("expr GT expr")
+    def condition(self, p):
+        return ("condition_gt", p.expr0, p.expr1)                  
 
     @_("var_assign")
     def statement(self, p):
@@ -52,7 +84,7 @@ class TryCodeParser(Parser):
 
     @_('NAME "=" expr')
     def var_assign(self, p):
-        print("name=e")
+        # print("name=e")
         return ("var_assign", p.NAME, p.expr)
 
     @_('NAME "=" STRING')
@@ -65,13 +97,12 @@ class TryCodeParser(Parser):
 
     @_('NAME "=" FALSE')
     def bool_assign(self, p):
-        return ("bool_assign", p.NAME, p.FALSE)
+        return ("bool_assign", p.NAME, p.FALSE)        
 
     @_("expr")
     def statement(self, p):
-        print("expr")
         return p.expr
-
+    
     @_('expr "+" expr')
     def expr(self, p):
         return ("add", p.expr0, p.expr1)
@@ -79,7 +110,7 @@ class TryCodeParser(Parser):
     @_('expr "-" expr')
     def expr(self, p):
         return ("sub", p.expr0, p.expr1)
-
+      
     @_('expr "*" expr')
     def expr(self, p):
         return ("mul", p.expr0, p.expr1)
@@ -90,7 +121,8 @@ class TryCodeParser(Parser):
 
     @_('"-" expr %prec UMINUS')
     def expr(self, p):
-        return p.expr
+        # return p.expr
+        return ("neg", p.expr) 
 
     @_("NAME")
     def expr(self, p):

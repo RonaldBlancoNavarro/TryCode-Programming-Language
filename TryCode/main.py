@@ -3,7 +3,8 @@ from tkinter import Tk
 
 def main():
     root = Tk()
-    root.wm_title("Compilador")
+    root.wm_title("Compilador TryCode")
+    root.resizable(False, False)
     app = MainFrame(root)
     app.mainloop()
 

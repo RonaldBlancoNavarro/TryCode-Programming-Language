@@ -1,10 +1,10 @@
 from sly import Lexer
 
 class TryCodeLexer(Lexer):
-    tokens = { NAME, NUMBER, STRING, FLOAT, IF, THEN, ELSE, FOR, FUN, TO, ARROW, EQEQ , TRUE , FALSE }
+    tokens = { NAME, NUMBER, STRING, FLOAT, IF, THEN, ELSE, FOR, FUN, TO, ARROW, EQEQ , NOEQ, LTEQ, GTEQ, LT, GT, TRUE , FALSE , AND, OR, NOT }
     ignore = '\t '
 
-    literals = { '=', '+', '-', '/', '*', '(', ')', ',', ';' }
+    literals = { '=', '+', '-', '/', '*', '(', ')', '{', '}', ',', ';' }
 
     # Define tokens
     IF = r'IF'
@@ -15,15 +15,21 @@ class TryCodeLexer(Lexer):
     TO = r'TO'
     TRUE = r'TRUE'
     FALSE = r'FALSE'
+    AND = r'AND'
+    OR = r'OR'
+    NOT = r'NOT'
     ARROW = r'->'
     NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
     STRING = r'\".*?\"'
     
-
     EQEQ = r'=='
+    NOEQ = r'!='
+    LTEQ = r'<='
+    GTEQ = r'>='
+    LT = r'<'
+    GT = r'>'
 
-
-    @_(r"[+-]?[0-9]+\.[0-9]+")
+    @_(r"[0-9]+\.[0-9]+")
     def FLOAT(self, t):
         t.value = float(t.value)
         return t
@@ -38,6 +44,43 @@ class TryCodeLexer(Lexer):
         pass
 
     @_(r'\n+')
-    def newline(self,t ):
-        self.lineno = t.value.count('\n')
+    def ignore_newline(self, t):
+        self.lineno += t.value.count('\n')
 
+    def error(self, t):
+        print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
+        self.index += 1
+
+
+
+    # @_(r'\n+')
+    # def newline(self,t ):
+    #     self.lineno = t.value.count('\n') 
+    #     print(self.lineno)
+
+
+
+    # Line number tracking
+# if __name__ == '__main__':
+#     data = '''
+#         # Counting
+#         x = 0;
+#         2+2;
+#         x;
+#         '''
+
+#     listaExpresion = []  # Tokens dentro de una expresion
+#     listaExpresiones=[]  # Lista de expresiones
+#     lexer = TryCodeLexer()
+#     for tok in lexer.tokenize(data):
+#         if tok.type != ';':
+#             listaExpresion.append(tok)
+#         else:
+#             # listaExpresion.append(tok)
+#             listaExpresiones.append(listaExpresion)
+#             print(listaExpresion)
+#             listaExpresion = []
+#             print("<----------------------->")
+#         # print(tok)
+#     print("<-------Lista expresiones---------------->")
+#     print(listaExpresiones)
