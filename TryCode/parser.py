@@ -1,5 +1,6 @@
 from sly import Parser
 from lexer import TryCodeLexer
+_='_'
 
 class TryCodeParser(Parser):
     tokens = TryCodeLexer.tokens
@@ -15,7 +16,6 @@ class TryCodeParser(Parser):
 
     @_("")
     def statement(self, p):
-        # print("statement")
         pass
 
     @_("WHILE condition THEN \n statement \n  statement")
@@ -33,6 +33,14 @@ class TryCodeParser(Parser):
     @_('FUN NAME "(" ")" ARROW statement')
     def statement(self, p):
         return ("fun_def", p.NAME, p.statement)
+    
+    @_('PRINT "(" STRING ")"')
+    def print(self, p):
+        return ("print", p.STRING)
+    
+    @_('PRINT "(" NAME ")"')
+    def expr(self, p):
+        return ("var", p.NAME)
 
     @_('NAME "(" ")"')
     def statement(self, p):
@@ -81,6 +89,10 @@ class TryCodeParser(Parser):
     @_("bool_assign")
     def statement(self, p):
         return p.bool_assign
+    
+    @_("null_assign")
+    def statement(self, p):
+        return p.null_assign
 
     @_('NAME "=" expr')
     def var_assign(self, p):
@@ -97,11 +109,19 @@ class TryCodeParser(Parser):
 
     @_('NAME "=" FALSE')
     def bool_assign(self, p):
-        return ("bool_assign", p.NAME, p.FALSE)        
+        return ("bool_assign", p.NAME, p.FALSE)
+
+    @_('NAME "=" NULL')
+    def null_assign(self, p):
+        return ("null_assign", p.NAME, p.NULL)        
 
     @_("expr")
     def statement(self, p):
         return p.expr
+
+    @_("print")
+    def statement(self, p):
+        return p.print
     
     @_('expr "+" expr')
     def expr(self, p):

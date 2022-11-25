@@ -5,25 +5,33 @@ class TryCodeExecute:
         self.txtOutput = txtOutput
         self.env = env
         result = self.walkTree(tree)
-        if result is not None and isinstance(result, int) and result != True and result != False:
-            # print(result)
+        if result is not None and result == "True" or result == "False":
+           self.txtOutput.insert(END,result)
+        if result is not None and isinstance(result, int):
             self.txtOutput.insert(END,result)
         if result is not None and isinstance(result, float):
-            # print(result)
             self.txtOutput.insert(END,result)
         if isinstance(result, str) and result[0] == '"':
-            # print(result)
             self.txtOutput.insert(END,result)
+            self.txtOutput.insert(END,"\n")
         if result is not None  and isinstance(result, bool): #and result=="TRUE" :
-            # print(result)
             self.txtOutput.insert(END,result)
+        # if result is None:
+        #     # print(result)
+        #     self.txtOutput.insert(END,"Error logico: Variable nula, no se puede imprimir.")
+
+        # if result is not None and isinstance(result, bool): #and result=="FALSE" :
+        #     # print(result)
+        #     self.txtOutput.insert(END,result)
 
     def walkTree(self, node):
 
         if node == "TRUE":
-            return True
+            return "True"
         if node == "FALSE":
-            return False
+            return "False"
+        if node == "NULL":
+            return None
         # if isinstance(node, bool): 
         #     return node
 
@@ -55,6 +63,10 @@ class TryCodeExecute:
         
         if node[0] == "bool":
             return node[2]
+
+        if node[0] == "print":
+            self.txtOutput.insert(END,"\n")
+            return node[1]
 
         if node[0] == "if_stmt":
             result = self.walkTree(node[1])
@@ -119,6 +131,10 @@ class TryCodeExecute:
             self.env[node[1]] = self.walkTree(node[2])
             return node[1]
 
+        if node[0] == "null_assign":
+            self.env[node[1]] = self.walkTree(node[2])
+            return node[1]
+
         if node[0] == "for_loop":
             if node[1][0] == "for_loop_setup":
                 loop_setup = self.walkTree(node[1])
@@ -129,8 +145,8 @@ class TryCodeExecute:
                 for i in range(loop_count + 1, loop_limit + 1):
                     res = self.walkTree(node[2])
                     if res is not None:
-                        self.txtOutput.insert(END, '\n')
                         self.txtOutput.insert(END,res)
+                        self.txtOutput.insert(END, '\n')
                     self.env[loop_setup[0]] = i
                 del self.env[loop_setup[0]]
 
@@ -143,6 +159,6 @@ class TryCodeExecute:
                 while self.walkTree(node[1]):
                     res = self.walkTree(node[2][1])
                     if res is not None:
-                        self.txtOutput.insert(END, '\n')
                         self.txtOutput.insert(END,res)
+                        self.txtOutput.insert(END, '\n')
                     self.walkTree(node[2][2])
