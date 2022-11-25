@@ -1,3 +1,4 @@
+from tkinter import END
 from sly import Lexer
 _='_'
 class TryCodeLexer(Lexer):
@@ -6,7 +7,7 @@ class TryCodeLexer(Lexer):
 
     literals = { '=', '+', '-', '/', '*', '(', ')', '{', '}', ',', ';' }
 
-    # Define tokens
+    # Deficion de tokens
     IF = r'IF'
     THEN = r'THEN'
     ELSE = r'ELSE'
@@ -32,21 +33,21 @@ class TryCodeLexer(Lexer):
     LT = r'<'
     GT = r'>'
 
-    @_(r"[0-9]+\.[0-9]+")
+    @_(r"[0-9]+\.[0-9]+")# flotante
     def FLOAT(self, t):
         t.value = float(t.value)
         return t
     
-    @_(r'\d+')
+    @_(r'\d+')#entero
     def NUMBER(self, t):
         t.value = int(t.value)
         return t
 
-    @_(r'#.*')
+    @_(r'#.*')#comentario
     def COMMENT(self, t):
         pass
 
-    @_(r'\n+')
+    @_(r'\n+')#salto de linea
     def ignore_newline(self, t):
         self.lineno += t.value.count('\n')
 

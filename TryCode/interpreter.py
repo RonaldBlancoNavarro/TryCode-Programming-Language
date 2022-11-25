@@ -5,6 +5,7 @@ class TryCodeExecute:
         self.txtOutput = txtOutput
         self.env = env
         result = self.walkTree(tree)
+        #mostrar resultado en output
         if result is not None and result == "True" or result == "False":
            self.txtOutput.insert(END,result)
         if result is not None and isinstance(result, int):
@@ -14,17 +15,10 @@ class TryCodeExecute:
         if isinstance(result, str) and result[0] == '"':
             self.txtOutput.insert(END,result)
             self.txtOutput.insert(END,"\n")
-        if result is not None  and isinstance(result, bool): #and result=="TRUE" :
+        if result is not None  and isinstance(result, bool): 
             self.txtOutput.insert(END,result)
-        # if result is None:
-        #     # print(result)
-        #     self.txtOutput.insert(END,"Error logico: Variable nula, no se puede imprimir.")
 
-        # if result is not None and isinstance(result, bool): #and result=="FALSE" :
-        #     # print(result)
-        #     self.txtOutput.insert(END,result)
-
-    def walkTree(self, node):
+    def walkTree(self, node): #recorrer arbol
 
         if node == "TRUE":
             return "True"
@@ -32,9 +26,8 @@ class TryCodeExecute:
             return "False"
         if node == "NULL":
             return None
-        # if isinstance(node, bool): 
-        #     return node
-
+        
+        #tipos de datos
         if isinstance(node, int):
             return node
         if isinstance(node, float):
@@ -52,6 +45,7 @@ class TryCodeExecute:
                 self.walkTree(node[1])
                 self.walkTree(node[2])
 
+        #tipos de datos
         if node[0] == "num":
             return node[1]
 
@@ -68,7 +62,7 @@ class TryCodeExecute:
             self.txtOutput.insert(END,"\n")
             return node[1]
 
-        if node[0] == "if_stmt":
+        if node[0] == "if_stmt": #if
             result = self.walkTree(node[1])
             if result:
                 return self.walkTree(node[2][1])
@@ -93,17 +87,17 @@ class TryCodeExecute:
         if node[0] == "condition_not":
             return not self.walkTree(node[1])                                  
 
-        if node[0] == "fun_def":
+        if node[0] == "fun_def": #funcion
             self.env[node[1]] = node[2]
 
-        if node[0] == "fun_call":
+        if node[0] == "fun_call":#llamada a funcion
             try:
                 return self.walkTree(self.env[node[1]])
             except LookupError:
-                # print("Undefined function '%s'" % node[1])
                 self.txtOutput.insert(END,"Undefined function '%s'" % node[1])
                 return 0
 
+        #operaciones aritmeticas
         if node[0] == "add":
             return self.walkTree(node[1]) + self.walkTree(node[2])
         elif node[0] == "sub":
@@ -115,6 +109,7 @@ class TryCodeExecute:
         elif node[0] == "div":
             return self.walkTree(node[1]) / self.walkTree(node[2])
 
+        #asignacion de variables
         if node[0] == "var_assign":
             self.env[node[1]] = self.walkTree(node[2])
             return node[1]
@@ -123,7 +118,6 @@ class TryCodeExecute:
             try:
                 return self.env[node[1]]
             except LookupError:
-                # print("Undefined variable '" + node[1] + "' found!")
                 self.txtOutput.insert(END,"Undefined variable '" + node[1] + "' found!")
                 return 0
         
@@ -135,6 +129,7 @@ class TryCodeExecute:
             self.env[node[1]] = self.walkTree(node[2])
             return node[1]
 
+        #for
         if node[0] == "for_loop":
             if node[1][0] == "for_loop_setup":
                 loop_setup = self.walkTree(node[1])
@@ -153,6 +148,7 @@ class TryCodeExecute:
         if node[0] == "for_loop_setup":
             return (self.walkTree(node[1]), self.walkTree(node[2]))
 
+        #while
         if node[0] == "while_loop":
             if node[2][0] == "while_loop_statements":
 
