@@ -5,17 +5,16 @@ class TryCodeExecute:
         self.txtOutput = txtOutput
         self.env = env
         result = self.walkTree(tree)
-        if result is not None and isinstance(result, int): #and result != True and result != False:
-            # print(result)
+        if result is not None and result == "True" or result == "False":
+           self.txtOutput.insert(END,result)
+        if result is not None and isinstance(result, int):
             self.txtOutput.insert(END,result)
         if result is not None and isinstance(result, float):
-            # print(result)
             self.txtOutput.insert(END,result)
         if isinstance(result, str) and result[0] == '"':
-            # print(result)
             self.txtOutput.insert(END,result)
+            self.txtOutput.insert(END,"\n")
         if result is not None  and isinstance(result, bool): #and result=="TRUE" :
-            # print(result)
             self.txtOutput.insert(END,result)
         # if result is None:
         #     # print(result)
@@ -28,9 +27,9 @@ class TryCodeExecute:
     def walkTree(self, node):
 
         if node == "TRUE":
-            return True
+            return "True"
         if node == "FALSE":
-            return False
+            return "False"
         if node == "NULL":
             return None
         # if isinstance(node, bool): 
@@ -64,6 +63,10 @@ class TryCodeExecute:
         
         if node[0] == "bool":
             return node[2]
+
+        if node[0] == "print":
+            self.txtOutput.insert(END,"\n")
+            return node[1]
 
         if node[0] == "if_stmt":
             result = self.walkTree(node[1])
