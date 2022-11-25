@@ -62,7 +62,10 @@ class MainFrame(Frame):
         Words.add_command(label="PRINT", command= self.PRINT)
         Words.add_command(label="IF", command= self.IF)
         Words.add_command(label="FOR", command= self.FOR)
+        Words.add_command(label="FOR", command= self.FUN)
         Words.add_command(label="WHILE", command= self.WHILE)
+        Words.add_command(label="NOT", command= self.NOT)
+        Words.add_command(label="AND", command= self.AND)
 
         Types = Menu(menubar, tearoff=0)
         Types.add_command(label="STRING", command= self.STRING)
@@ -73,7 +76,8 @@ class MainFrame(Frame):
 
         Examples = Menu(menubar, tearoff=0)
         Examples.add_command(label="Ejemplo#1", command= self.EJEMPLO1)
-        Examples.add_command(label="Ejemplo#1", command= self.EJEMPLO2)
+        Examples.add_command(label="Ejemplo#2", command= self.EJEMPLO2)
+        Examples.add_command(label="Ejemplo#3", command= self.EJEMPLO3)
         
 
         Optionmenu = Menu(menubar, tearoff=0)
@@ -118,13 +122,13 @@ class MainFrame(Frame):
     def PRINT(self):
         self.txtInput.insert(END,"PRINT("'"Hola Mundo"'");")
     def IF(self):
-        self.txtInput.insert(END,"a=1;\nIF a==1 THEN\na\nELSE\na+2;")
+        self.txtInput.insert(END,"a=1;\nIF a==1 THEN\na\nELSE\na=a+2;")
     def FOR(self):
         self.txtInput.insert(END,"FOR a=0 TO 5 THEN a;")
     def WHILE(self):
         self.txtInput.insert(END,"a=1;\nWHILE a<3 THEN\na\na=a+1;")
     def FUN(self):
-        self.txtInput.insert(END,"FUN hello() -> x=10;")
+        self.txtInput.insert(END,"FUN prueba()-> PRINT("'"HOLA"'");")
     def STRING(self):
         self.txtInput.insert(END,"var="'"hola"'";")
     def NUMBER(self):
@@ -135,10 +139,16 @@ class MainFrame(Frame):
         self.txtInput.insert(END,"TRUE")
     def FALSE(self):
         self.txtInput.insert(END,"FALSE")
+    def NOT(self):
+        self.txtInput.insert(END,"a=2;\nIF NOT a!=2 THEN\n3\nELSE\n4;")
+    def AND(self):
+        self.txtInput.insert(END,"a=1;b=2;\nIF a==1 AND b==0 THEN\n3\nELSE\n4;")
     def EJEMPLO1(self):
         self.txtInput.insert(END,"n1 = 9 - 6;\nn2 = 4 + 2;\nPRINT(n1);\nPRINT(n2);\nIF n1<n2 THEN\nPRINT(n1)\nELSE\nPRINT(n2);")
     def EJEMPLO2(self):
         self.txtInput.insert(END,"x = 0;\nPRINT(x);\nWHILE x<5 THEN\nx\nx=x+1;")
+    def EJEMPLO3(self):
+        self.txtInput.insert(END,"a=1;\nFUN prueba()-> WHILE a<3 THEN a a=a+1;\nprueba();")
 
     def limpiar(self):
         self.txtInput.delete(1.0, "end-1c")
@@ -164,35 +174,21 @@ class MainFrame(Frame):
 
     def AcercaDe(self):
         MessageBox.showinfo("Acerca de este proyecto", "Curso: Paradigmas de programación 2022\nElaborado por:\nSergio Villanueva Ríos\nRonald Blanco Navarro\nEsteban Altamirano Granados")
-        
+
+    
     def ejecutar(self):
-        messagebox.showinfo(title="PruebaEjecutar", message="ejecucion exitosa")
-
-
-
-
-            # text = input
-
-            # print(self.input)
-            # print("----------------------")
-            # print(text)
-
-
-            # lexer1 = self.lexer.get_lexer()
-            # print(lexer1)
-            # print("hola mundo")
-
-            # listaExpresion = []  # Tokens dentro de una expresion
-            # listaExpresiones=[]  # Lista de expresiones
-            # for tok in self.lexer.tokenize(text):
-            #     print(tok)
-            #     if tok.type != ';':
-            #         listaExpresion.append(tok)
-            #     else:
-            #         listaExpresiones.append(listaExpresion)
-            #         listaExpresion = []
-            # tree = self.parser.parse(listaExpresiones)
-            # TryCodeExecute(tree, self.env , self.txtOutput)
-            # self.txtOutput.see(END)
-
-            # print(self.parser.parse(self.lexer.tokenize(text)))
+        self.txtOutput.delete(1.0, "end-1c")
+        self.input = self.txtInput.get(1.0, "end-1c")
+        while True:
+            text = extraerExpresion(self)
+            if text == "-1":
+                self.txtOutput.insert(END, '\n')
+                self.txtOutput.insert(END, "Error: ausencia de caracter ';' al final de expresion -  Compilacion finalizada")
+                return                    
+            if text:
+                tree = self.parser.parse(self.lexer.tokenize(text))
+                self.txtOutput.see(END)
+            else:
+                self.txtOutput.insert(END, '\n')
+                self.txtOutput.insert(END, "Compilacion finalizada")
+                return
