@@ -18,9 +18,6 @@ from tkinter import messagebox as MessageBox
 from lexer import TryCodeLexer
 from parser import TryCodeParser
 
-# sys.path.insert(1, "\TryCode\TryCode")
-# from TryCode import tryCode
-
 def extraerExpresion(self):    #encontar ; mas cercano y retornar la cadena de texto desde el inicio hasta el ;
     expresion = ""
     if self.input == "":
@@ -33,8 +30,7 @@ def extraerExpresion(self):    #encontar ; mas cercano y retornar la cadena de t
     except ValueError:
         return "-1"
 
-
-class MainFrame(Frame):
+class MainFrame(Frame):  # creacion de la vista
     def __init__(self, master=None):
         super().__init__(master, width=1280, height=700, bg="#2c4b65")
         self.var_op = IntVar()
@@ -47,8 +43,9 @@ class MainFrame(Frame):
         self.input=""
         
 
-    def create_widgets(self):
+    def create_widgets(self):# creacion de elementos en pantalla
 
+        #Creacion de menu de opciones
         menubar=Menu(self.master)
 
         self.master.config(menu=menubar)
@@ -94,6 +91,7 @@ class MainFrame(Frame):
         menubar.add_cascade(label="Opciones", menu=Optionmenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
 
+        #Creacion de botones
         self.btnCalcular = Button(self, text="Compilar", command=self.compilar)
         self.btnCalcular.place(x=1100, y=650)
         self.btnCalcular.configure(background="#ffffff")
@@ -118,6 +116,8 @@ class MainFrame(Frame):
         self.txtOutput = Text(p_aux, width=66, height=34, yscrollcommand=scroll.set)
         self.txtOutput.pack(side="left")
         scroll.config(command=self.txtOutput.yview)
+
+    #ejemplos de codigo
 
     def PRINT(self):
         self.txtInput.insert(END,"PRINT("'"Hola Mundo"'");")
@@ -150,11 +150,11 @@ class MainFrame(Frame):
     def EJEMPLO3(self):
         self.txtInput.insert(END,"a=1;\nFUN prueba()-> WHILE a<3 THEN a a=a+1;\nprueba();")
 
-    def limpiar(self):
+    def limpiar(self):#limpiar input y output
         self.txtInput.delete(1.0, "end-1c")
         self.txtOutput.delete(1.0, "end-1c")
 
-    def compilar(self):
+    def compilar(self): #compilar codigo
         self.txtOutput.delete(1.0, "end-1c")
         self.input = self.txtInput.get(1.0, "end-1c")
         while True:
@@ -164,8 +164,8 @@ class MainFrame(Frame):
                 self.txtOutput.insert(END, "Error: ausencia de caracter ';' al final de expresion -  Compilacion finalizada")
                 return                    
             if text:
-                tree = self.parser.parse(self.lexer.tokenize(text))
-                TryCodeExecute(tree, self.env, self.txtOutput)
+                tree = self.parser.parse(self.lexer.tokenize(text)) #analisis lexico y sintactico
+                TryCodeExecute(tree, self.env, self.txtOutput)#ejecucion
                 self.txtOutput.see(END)
             else:
                 self.txtOutput.insert(END, '\n')

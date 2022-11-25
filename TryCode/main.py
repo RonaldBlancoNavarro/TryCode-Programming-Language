@@ -1,3 +1,9 @@
+#UNA
+#Proyecto Paradigmas de Programacion TryCode
+#Sergio Villanueva Rios
+#Esteban Altamirano
+#Ronald Blanco Navarro
+
 from mainFrame import MainFrame
 from tkinter import *
 
