@@ -5,7 +5,7 @@ class TryCodeExecute:
         self.txtOutput = txtOutput
         self.env = env
         result = self.walkTree(tree)
-        if result is not None and isinstance(result, int) and result != True and result != False:
+        if result is not None and isinstance(result, int): #and result != True and result != False:
             # print(result)
             self.txtOutput.insert(END,result)
         if result is not None and isinstance(result, float):
@@ -142,8 +142,8 @@ class TryCodeExecute:
                 for i in range(loop_count + 1, loop_limit + 1):
                     res = self.walkTree(node[2])
                     if res is not None:
-                        self.txtOutput.insert(END, '\n')
                         self.txtOutput.insert(END,res)
+                        self.txtOutput.insert(END, '\n')
                     self.env[loop_setup[0]] = i
                 del self.env[loop_setup[0]]
 
@@ -156,8 +156,8 @@ class TryCodeExecute:
                 while self.walkTree(node[1]):
                     res = self.walkTree(node[2][1])
                     if res is not None:
-                        self.txtOutput.insert(END, '\n')
                         self.txtOutput.insert(END,res)
+                        self.txtOutput.insert(END, '\n')
                     self.walkTree(node[2][2])
 
 

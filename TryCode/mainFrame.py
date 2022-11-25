@@ -58,7 +58,9 @@ class MainFrame(Frame):
         filemenu.add_command(label="Salir", command=self.master.quit)
 
         Words = Menu(menubar, tearoff=0)
-        Words.add_command(label="IF")
+        Words.add_command(label="IF", command= self.IF)
+        Words.add_command(label="FOR", command= self.FOR)
+
 
         Optionmenu = Menu(menubar, tearoff=0)
         Optionmenu.add_cascade(label="Palabras reservadas",menu=Words)
@@ -74,13 +76,6 @@ class MainFrame(Frame):
         menubar.add_cascade(label="Archivo", menu=filemenu)
         menubar.add_cascade(label="Opciones", menu=Optionmenu)
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
-
-        # self.btnNuevo = Button(self, text="Nuevo", command=self.limpiar)
-        # self.btnNuevo.place(x=10, y=10, width=100, height=20)
-        # self.lblOpciones = Label(self, text="Opciones")
-        # self.lblOpciones.place(x=100, y=10, width=100, height=20)
-        # self.btnSalir = Button(self, text="Salir", command=self.master.destroy)
-        # self.btnSalir.place(x=200, y=10, width=100, height=20)
 
         self.btnCalcular = Button(self, text="Compilar", command=self.compilar)
         self.btnCalcular.place(x=1100, y=650)
@@ -106,6 +101,11 @@ class MainFrame(Frame):
         self.txtOutput = Text(p_aux, width=66, height=34, yscrollcommand=scroll.set)
         self.txtOutput.pack(side="left")
         scroll.config(command=self.txtOutput.yview)
+
+    def IF(self):
+        self.txtInput.insert(1.0,"a=1;\nIF a==1 THEN\na\nELSE\na+2;")
+    def FOR(self):
+        self.txtInput.insert(1.0,"FOR a=0 TO 5 THEN a;")
 
     def limpiar(self):
         self.txtInput.delete(1.0, "end-1c")
