@@ -14,6 +14,8 @@ class TryCodeParser(Parser):
     def __init__(self):
         self.env = {}
 
+    #Reglas de arbol de sintaxis
+
     @_("")
     def statement(self, p):
         pass
@@ -96,7 +98,6 @@ class TryCodeParser(Parser):
 
     @_('NAME "=" expr')
     def var_assign(self, p):
-        # print("name=e")
         return ("var_assign", p.NAME, p.expr)
 
     @_('NAME "=" STRING')
@@ -141,7 +142,6 @@ class TryCodeParser(Parser):
 
     @_('"-" expr %prec UMINUS')
     def expr(self, p):
-        # return p.expr
         return ("neg", p.expr) 
 
     @_("NAME")
